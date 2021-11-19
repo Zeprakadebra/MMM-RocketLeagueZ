@@ -1,0 +1,23 @@
+{
+	"name": "MMM-RocketLeagueZ",
+	"version": "1.0.0",
+	"description": "A MagicMirror2 module that shows Rocket League gamertag stats.",
+	"keywords": [
+		"magic mirror",
+		"rocket league"
+	],
+	"homepage": "https://github.com/Zebrakadebra/MMM-RocketLeagueZ#readme",
+	"bugs": {
+		"url": "https://github.com/Zebrakadebra/MMM-RocketLeagueZ/issues"
+	},
+	"license": "MIT",
+	"author": "Oliver Petersen",
+	"main": "MMM-RocketLeagueZ.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Zebrakadebra/MMM-RocketLeagueZ"
+	},
+	"dependencies": {
+		"request-promise": "^4.2.4"
+	}
+}
