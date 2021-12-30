@@ -48,11 +48,13 @@ Module.register('MMM-RocketLeagueZ', {
 			if (0 === payload.stats.length)
 				return;
 
-			Console.log(this.name + ': STATS_RESULT SocketNotification received');
+			console.log(this.name + ': STATS_RESULT SocketNotification received');
 			this.stats = payload.stats;
+			console.log(this.name + ': STATS:' + JSON.stringify(this.stats));
+			console.log(this.name + ': STATS_COUNT:' + this.stats.length);
 			
 			for (let i = 0; i < this.stats.length; ++i) {	
-				Console.log(this.name + ': for gamertag ' + this.stats[i].gamertag);
+				console.log(this.name + ': for gamertag ' + this.stats[i].gamertag);
 			}
 			this.updateDom(0);
 		}
@@ -66,8 +68,6 @@ Module.register('MMM-RocketLeagueZ', {
 			wrapper.className = 'loading dimmed xsmall';
 			return wrapper;
 		}
-
-		console.log('node_helper of ' + this.name + ' extracts playlist ' + playlist.name + ' for gamertag ' + gamertag);
 
 		wrapper.className = 'bright xsmall';
 
@@ -90,8 +90,8 @@ Module.register('MMM-RocketLeagueZ', {
 			this.createTableCell(row, stat.gamertag, 'gamertag', 'left');
 			for (let j = 0; j < this.config.showPlaylists.length; ++j) {
 				
-				for (let k = 0; k < this.stat.playlists.length; ++k) {
-					const playlist = this.stat.playlists[k];
+				for (let k = 0; k < this.stats.playlists.length; ++k) {
+					const playlist = this.stats.playlists[k];
 
 					if (playlist.name === this.config.showPlaylists[j]) {
 						this.createRankTableCell(row, playlist.iconURL, playlist.rankName, playlist.divisionNumber, playlist.ratingValue, this.translate(playlist.name), 'center');
@@ -107,14 +107,14 @@ Module.register('MMM-RocketLeagueZ', {
 	// Override start to init stuff.
 	start: function() {
 		this.stats = null;
-		Console.log(this.name + ': Modul started');
+		console.log(this.name + ': Modul started');
 
 		// Tell node_helper to load stats at startup.
 		this.sendSocketNotification('GET_STATS', { identifier: this.identifier,
 												   platforms: this.config.platforms,
 		                                           gamertags: this.config.gamertags,
 		                                           sortBy: this.config.sortBy });
-		Console.log(this.name + ': GET_STATS SocketNotification sent');
+		console.log(this.name + ': GET_STATS SocketNotification sent');
 		
 		// Make sure stats are reloaded at user specified interval.
 		let interval = Math.max(this.config.fetchInterval, 1000);  // In millisecs. < 1 min not allowed.
@@ -125,8 +125,8 @@ Module.register('MMM-RocketLeagueZ', {
 													   gamertags: self.config.gamertags,
 		                                               sortBy: self.config.sortBy });
 		}, interval); // In millisecs.
-		Console.log(this.name + ': SocketNotification interval set');
-		Console.log(this.name + ': waiting for reply from node_helper');		
+		console.log(this.name + ': SocketNotification interval set');
+		console.log(this.name + ': waiting for reply from node_helper');		
 	},
 
 	// Creates a table row cell.

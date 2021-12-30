@@ -21,7 +21,7 @@ module.exports = NodeHelper.create({
 	// @param segNo - The segment number where to take the stats from.
 	// @return Object with stats we want to show.
 	extractStats: function(json,segNo) {
-		const divNo = json.segments[segNo].stats.division.metadata.name;
+		let divNo = json.segments[segNo].stats.division.metadata.name;
 		switch (divNo) {
 			case 'Divison I':
 				divNo = '1';
@@ -65,6 +65,7 @@ module.exports = NodeHelper.create({
 
 		for (let i = 0; i < gamertags.length; ++i) {
 			const userURL = baseURL + platforms[i] + '/' + gamertags[i] + '?';
+			console.log(this.name + ':' + userURL);
 			const options = {uri: userURL};
 			promises.push(rp(options));
 		}
@@ -74,21 +75,22 @@ module.exports = NodeHelper.create({
 		
 		Promise.all(promises).then((contents) => {
 			let stats = [];
-
+			console.log(this.name + '- Contents Length:' + contents.length);
 			for (let i = 0; i < contents.length; ++i) {
 				const content = contents[i];
 				const json = JSON.parse(content);
-				const gamertag = json.platformInfo.platformUserIdentifier;
+				const data = json.data;
+				const gamertag = data.platformInfo.platformUserIdentifier;
 				
 				let playlists = [];
 				
-				for (let j = 0; j < json.segments.length; ++j) {
-					if (json.segments[j].type === 'playlist') {
-						const playlist = this.extractPlaylist(json,j);
+				for (let j = 0; j < data.segments.length; ++j) {
+					if (data.segments[j].type === 'playlist') {
+						const playlist = this.extractStats(data,j);
 						console.log('node_helper of ' + this.name + ' extracts playlist ' + playlist.name + ' for gamertag ' + gamertag);
 						playlists.push(playlist);
 					}
-				const stat = [gamertag,playlists];
+				const stat = [gamertag, playlists];
 				stats.push(stat);
 				}
 			}
