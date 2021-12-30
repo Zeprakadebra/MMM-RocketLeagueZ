@@ -88,7 +88,7 @@ module.exports = NodeHelper.create({
 						console.log('node_helper of ' + this.name + ' extracts playlist ' + playlist.name + ' for gamertag ' + gamertag);
 						playlists.push(playlist);
 					}
-				const stat = [gamertag,playlists],
+				const stat = [gamertag,playlists];
 				stats.push(stat);
 				}
 			}

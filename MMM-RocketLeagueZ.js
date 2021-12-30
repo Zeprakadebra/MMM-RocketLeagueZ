@@ -10,7 +10,7 @@ Module.register('MMM-RocketLeagueZ', {
 	defaults: {
 		platforms: ['xbl','xbl','xbl','xbl'],
 		gamertags: ['SkillKiddo','RauRauBeck','BarbieBasil','DoriBombino'],
-		showPlaylists = ['Un-Ranked','Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches'],
+		showPlaylists: ['Un-Ranked','Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches'],
 		sortBy: 'gamertag', //'gamertag' ascending or 'Un-Ranked' descending or 'Single' descending or 'Double' descending or 'Standard' descending or 'Tournament' descending
 		fetchInterval: 10*60*1000 // in milliseconds. default every ten minutes
 	},

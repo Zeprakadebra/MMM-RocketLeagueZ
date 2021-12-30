@@ -1,0 +1,48 @@
+.imageSmall {
+	vertical-align: top;
+	width: 50px;
+	height: 50px;
+	}
+
+.imageLarge {
+	vertical-align: top;
+	width: 80px;
+	height: 80px;
+	}
+
+.division {
+	text-align: left;
+	font-style: italic;
+	font-size: 20px;
+	color: gold;
+	}
+
+.gamer {
+	font-style: bold;
+	color: grey;
+	}
+
+.gamer, .mmr, .deltaUp, .deltaDown, .streakLoss, .streakWin {
+	font-size: 30px;
+	text-align: center;
+	vertical-align: center;
+	padding-bottom: 10px;
+	} 
+
+.mmr {
+	font-style: italic;
+	color: lightblue;
+	width: 80px;
+	}
+
+.streakWin, .streakLoss {
+	padding-left: 20px;
+	}
+
+.deltaUp, .streakWin {
+	color: green;
+		}
+
+.deltaDown, .streakLoss {
+        color: red;
+        }
