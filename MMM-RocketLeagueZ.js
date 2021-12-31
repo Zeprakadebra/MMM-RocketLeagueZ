@@ -8,10 +8,20 @@
 Module.register('MMM-RocketLeagueZ', {
 	// default configuration
 	defaults: {
-		platforms: ['xbl','xbl','xbl','xbl'],
-		gamertags: ['SkillKiddo','RauRauBeck','BarbieBasil','DoriBombino'],
-		showPlaylists: ['Un-Ranked','Ranked Duel 1v1','Ranked Doubles 2v2','Ranked Standard 3v3','Tournament Matches'],
-		sortBy: 'gamertag', //'gamertag' ascending or 'Un-Ranked' descending or 'Single' descending or 'Double' descending or 'Standard' descending or 'Tournament' descending
+        baseURL: 'https://api.tracker.gg/api/v2/rocket-league/standard/profile/',
+        gamers: [
+            'xbl/SkillKiddo', 
+            'xbl/RauRauBeck', 
+            'xbl/BarbieBasil', 
+            'xbl/DoriBombino'
+        ],
+		playlists: [
+            'Un-Ranked',
+            'Ranked Duel 1v1',
+            'Ranked Doubles 2v2',
+            'Ranked Standard 3v3',
+            'Tournament Matches'
+        ],
 		fetchInterval: 10*60*1000 // in milliseconds. default every ten minutes
 	},
 
@@ -66,41 +76,10 @@ Module.register('MMM-RocketLeagueZ', {
 		if (null == this.stats) {
 			wrapper.innerHTML = this.translate('LOADING');
 			wrapper.className = 'loading dimmed xsmall';
-			return wrapper;
-		}
-
-		wrapper.className = 'bright xsmall';
-
-		let headerRow = document.createElement('tr');
-		headerRow.className = 'normal header-row';
-
-		this.createTableCell(headerRow, this.translate('gamertag'), 'gamertag-header', 'left');
-		this.createTableCell(headerRow, this.translate(this.config.showPlaylists[0]), 'un-ranked-header', 'center');
-		this.createTableCell(headerRow, this.translate(this.config.showPlaylists[1]), 'level-header', 'center');
-		this.createTableCell(headerRow, this.translate(this.config.showPlaylists[2]), 'level-header', 'center');
-		this.createTableCell(headerRow, this.translate(this.config.showPlaylists[3]), 'level-header', 'center');
-		this.createTableCell(headerRow, this.translate(this.config.showPlaylists[4]), 'level-header', 'center');
-		wrapper.appendChild(headerRow);
-
-		for (let i = 0; i < this.stats.length; ++i) {
-			let row = document.createElement('tr');
-			row.className = 'normal bright stats-row';
-			
-			const stat = this.stats[i];
-			this.createTableCell(row, stat.gamertag, 'gamertag', 'left');
-			for (let j = 0; j < this.config.showPlaylists.length; ++j) {
-				
-				for (let k = 0; k < this.stats.playlists.length; ++k) {
-					const playlist = this.stats.playlists[k];
-
-					if (playlist.name === this.config.showPlaylists[j]) {
-						this.createRankTableCell(row, playlist.iconURL, playlist.rankName, playlist.divisionNumber, playlist.ratingValue, this.translate(playlist.name), 'center');
-					}
-				}
-			}
-			wrapper.appendChild(row);
-		}
-
+		} else {
+            wrapper.innerHTML = 'ready';
+			wrapper.className = 'loading dimmed xsmall';
+        }
 		return wrapper;
 	},
 
@@ -110,49 +89,13 @@ Module.register('MMM-RocketLeagueZ', {
 		console.log(this.name + ': Modul started');
 
 		// Tell node_helper to load stats at startup.
-		this.sendSocketNotification('GET_STATS', { identifier: this.identifier,
-												   platforms: this.config.platforms,
-		                                           gamertags: this.config.gamertags,
-		                                           sortBy: this.config.sortBy });
+		this.sendSocketNotification('GET_STATS', { identifier: this.identifier, baseURL: this.config.baseURL, gamers: this.config.gamers });
 		console.log(this.name + ': GET_STATS SocketNotification sent');
 		
 		// Make sure stats are reloaded at user specified interval.
-		let interval = Math.max(this.config.fetchInterval, 1000);  // In millisecs. < 1 min not allowed.
 		let self = this;
-		setInterval(function() {
-			self.sendSocketNotification('GET_STATS', { identifier: self.identifier,
-			                                           platforms: self.config.platforms,
-													   gamertags: self.config.gamertags,
-		                                               sortBy: self.config.sortBy });
-		}, interval); // In millisecs.
+		setInterval(function() {self.sendSocketNotification('GET_STATS', { identifier: self.identifier, baseURL: self.config.baseURL, gamers: self.config.gamers });}, Math.max(self.config.fetchInterval, 1000)); // In millisecs.
 		console.log(this.name + ': SocketNotification interval set');
 		console.log(this.name + ': waiting for reply from node_helper');		
-	},
-
-	// Creates a table row cell.
-	// @param row - The table row to add cell to.
-	// @param iconURL - The iconURL of the img to show.
-	// @param rankName - The rankName to show.
-	// @param divisionNumber - The divisionNumber to show.
-	// @param ratingValue - The ratingValue to show.
-	createRankTableCell: function(row, iconURL, rankName, divisionNumber, ratingValue, className, align)
-	{
-		const text = "<img src='" + iconURL + "' width=20px height=20px alt='" + rankName + "'/>" + new Intl.NumberFormat().format(divisionNumber) + "/" + new Intl.NumberFormat().format(ratingValue);
-		this.createTableCell(row, text, className, align);
-	},
-
-	// Creates a table row cell.
-	// @param row - The table row to add cell to.
-	// @param text - text to show.
-	// @param align - text align: 'left', 'center' or 'right'.
-	createTableCell: function(row, text, className, align = 'left')
-	{
-		let cell = document.createElement('td');
-		cell.innerHTML = text;
-		cell.className = className;
-
-		cell.style.cssText = 'text-align: ' + align + ';';
-
-		row.appendChild(cell);
 	}
 });
