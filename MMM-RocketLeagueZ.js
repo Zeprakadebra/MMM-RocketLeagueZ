@@ -8,6 +8,7 @@
 Module.register('MMM-RocketLeagueZ', {
 	// default configuration
 	defaults: {
+		header: 'Haleluja',
         baseURL: 'https://api.tracker.gg/api/v2/rocket-league/standard/profile/',
         gamers: [
             'xbl/SkillKiddo', 
@@ -40,10 +41,11 @@ Module.register('MMM-RocketLeagueZ', {
 		}
 	},
 
+	getHeader: function() {
+		return this.data.header + ' ' + this.translate(this.config.playlists[this.currentPlaylist]);
+	},
+
 	// Notification from node_helper.js.
-	// The stats is received here. Then module is redrawn.
-	// @param notification - Notification type.
-	// @param payload - Contains an array of user stats. Each item in the array contains gamertag / playlistName / rankName / iconURL / divisionName / ratingValue.
 	socketNotificationReceived: function(notification, payload) {
 
 		if (notification === 'STATS_RESULT') {
@@ -63,7 +65,6 @@ Module.register('MMM-RocketLeagueZ', {
 				return;
 
 			this.stats = payload.stats;
-			this.updateDom(0);
 		}
 	},
 
@@ -74,19 +75,95 @@ Module.register('MMM-RocketLeagueZ', {
 			wrapper.innerHTML = this.translate('LOADING');
 			wrapper.className = 'loading dimmed xsmall';
 		} else {
-			console.log('stats rendering: ' + this.stats.length);
+			this.currentPlaylist = this.currentPlaylist == this.config.playlists.length - 1 ? 0 : this.currentPlaylist + 1;
+			let gamers = [];
+			console.log(this.name + ': gamer stats rendering for playlist ' + this.translate(this.config.playlists[this.currentPlaylist]));
 			this.stats.forEach((stat) => {
-				console.log(stat.gamertag);
+				stat.playlists.forEach((playlist) => {
+					if (playlist.name == this.config.playlists[this.currentPlaylist]) {
+						let gamer = {
+							tag: stat.gamertag,
+							avatarURL: stat.avatarURL,
+							rankName: playlist.rankName,
+							divisionNumber: this.translate(playlist.divisionNumber),
+							iconURL: playlist.iconURL,
+							rankValue: playlist.rankValue,
+						}
+						gamers.push(gamer);
+					}
+				});
 			});
-			wrapper.innerHTML = 'ready';
-			wrapper.className = 'loading dimmed xsmall';
+			gamers.sort((a, b) => {
+				return b.rankValue - a.rankValue;
+			});
+
+			
+			gamers.forEach((gamer) => {
+
+				let row = document.createElement('tr');
+					row.className = 'normal bright stats-row';
+
+				let cell = document.createElement('td');
+					cell.rowSpan = 2;
+					cell.innerHTML = "<img src='" + gamer.avatarURL + "' width=100px height=100px alt='" + gamer.tag + "'/>"  
+					cell.style.cssText = 'text-align: left;';
+					row.appendChild(cell);
+			
+					cell = document.createElement('td');
+					cell.rowSpan = 2;
+					cell.innerHTML = gamer.tag;  
+					cell.style.cssText = 'text-align: left;';
+					row.appendChild(cell);
+
+					cell = document.createElement('td');
+					cell.innerHTML = gamer.rankValue;  
+					cell.style.cssText = 'text-align: right;';
+					row.appendChild(cell);
+
+					cell = document.createElement('td');
+					cell.rowSpan = 2;
+					cell.innerHTML = "<img src='" + gamer.iconURL + "' width=100px height=100px alt='" + gamer.rankName + "'/>"  
+					cell.style.cssText = 'text-align: left;';
+					row.appendChild(cell);
+					wrapper.appendChild(row);
+
+					row = document.createElement('tr');
+					row.className = 'normal bright stats-row';
+
+					cell = document.createElement('td');
+					cell.innerHTML = gamer.divisionNumber;  
+					cell.style.cssText = 'text-align: right;';
+					row.appendChild(cell);
+					wrapper.appendChild(row);
+
+				console.log(gamer.tag + ': ' + gamer.rankName + '/' + gamer.divisionNumber + ' => ' + gamer.rankValue + ' = ' + gamer.avatarURL);
+			});
         }
 		return wrapper;
+	},
+
+	createRankTableCell: function(row, iconURL, rankName, divisionNumber, ratingValue, className, align)
+	{
+		const text = "<img src='" + iconURL + "' width=20px height=20px alt='" + rankName + "'/>" + new Intl.NumberFormat().format(divisionNumber) + "/" + new Intl.NumberFormat().format(ratingValue);
+		this.createTableCell(row, text, className, align);
+	},
+
+	createTableCell: function(row, text, className, align = 'left')
+	{
+		let cell = document.createElement('td');
+		cell.innerHTML = text;
+		cell.className = className;
+
+		cell.style.cssText = 'text-align: ' + align + ';';
+
+		row.appendChild(cell);
 	},
 
 	// Override start to init stuff.
 	start: function() {
 		this.stats = null;
+		this.currentPlaylist = 0;
+
 		console.log(this.name + ': Modul started');
 
 		// Tell node_helper to load stats at startup.

@@ -39,6 +39,9 @@ module.exports = NodeHelper.create({
 				gamers.forEach((gamer) => {
 					const gamertag = gamer.data.data.platformInfo.platformUserIdentifier;
 					const segments = gamer.data.data.segments;
+					const avatarURL = gamer.data.data.platformInfo.avatarUrl;
+
+					console.log(avatarURL);
 
 					let playlists = [];
 
@@ -48,8 +51,8 @@ module.exports = NodeHelper.create({
 							const playlist = {
 								name: segment.metadata.name,
 								rankName: segment.stats.tier.metadata.name,
-								iconURL: segment.stats.tier.metadata.iconUrl,
 								divisionNumber: segment.stats.division.metadata.name,
+								iconURL: segment.stats.tier.metadata.iconUrl,
 								rankValue: segment.stats.rating.value
 							};
 
@@ -58,7 +61,8 @@ module.exports = NodeHelper.create({
 					});
 
 					const stat = {
-						gamertag: gamertag, 
+						gamertag: gamertag,
+						avatarURL: avatarURL,
 						playlists: playlists
 					};
 
