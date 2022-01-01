@@ -1,7 +1,7 @@
 # Documentation
 This MagicMirror2 module named MMM-RocketLeagueZ displays cross-platform stats (rank,MMR) of the popular computer game Rocket League.
 
-You can choose for which gamertags and platforms you want to get stats.
+You can choose for which gamertags, platforms and playlists you want to get stats for.
 
 ![RocketLeagueZ_png](https://github.com/Zeprakadebra/MMM-RocketLeagueZ/blob/master/MMM-RocketLeagueZ.png)
 # Install
