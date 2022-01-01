@@ -58,14 +58,7 @@ Module.register('MMM-RocketLeagueZ', {
 			if (0 === payload.stats.length)
 				return;
 
-			console.log(this.name + ': STATS_RESULT SocketNotification received');
 			this.stats = payload.stats;
-			console.log(this.name + ': STATS:' + JSON.stringify(this.stats));
-			console.log(this.name + ': STATS_COUNT:' + this.stats.length);
-			
-			for (let i = 0; i < this.stats.length; ++i) {	
-				console.log(this.name + ': for gamertag ' + this.stats[i].gamertag);
-			}
 			this.updateDom(0);
 		}
 	},
@@ -77,7 +70,12 @@ Module.register('MMM-RocketLeagueZ', {
 			wrapper.innerHTML = this.translate('LOADING');
 			wrapper.className = 'loading dimmed xsmall';
 		} else {
-            wrapper.innerHTML = 'ready';
+			console.log('stats rendering: ' + this.stats.length);
+			let html = '';
+			this.stats.forEach((stat) => {
+				console.log(stat.gamertag);
+			});
+			wrapper.innerHTML = 'ready';
 			wrapper.className = 'loading dimmed xsmall';
         }
 		return wrapper;

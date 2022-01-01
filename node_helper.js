@@ -21,7 +21,9 @@ module.exports = NodeHelper.create({
 	},
 
 	getStats: function(payload) {
+		let identifier = payload.identifier;
 		let gamers = payload.gamers;
+		let playlistsNeeded = payload.playlists;
 		let baseURL = payload.baseURL;
 		let promises = [];
 
@@ -70,12 +72,11 @@ module.exports = NodeHelper.create({
 							playlists.push(playlist);
 						}
 					});
-					console.log(gamertag + ':' + playlists.length);
-					const stat = [gamertag, playlists];
-					stats.push(stat);
+				const stat = {gamertag: gamertag, playlists: playlists};
+				stats.push(stat);
 				});
-				console.log('stats:' + stats.length);
-				this.sendSocketNotification('STATS_RESULT', {identifier: this.identifier, stats: stats} );
+				console.log('sending STATS_RESULT' + stats.length);
+				this.sendSocketNotification('STATS_RESULT', {identifier: identifier, stats: stats} );
 			})
 			.catch((error) => {
 				console.log(error);
