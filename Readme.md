@@ -6,7 +6,7 @@ You can choose for which gamertags and platforms you want to get stats.
 ![RocketLeagueZ_png](https://github.com/Zeprakadebra/MMM-RocketLeagueZ/blob/master/MMM-RocketLeagueZ.png)
 # Install
 1. Change the directory to MagicMirror/modules: ```$ cd MagicMirror/modules```
-2. Clone this repo: ```$ git clone https://github.com/Zeprakadebra/blob/master/MMM-RocketLeagueZ```
+2. Clone this repo: ```$ git clone https://github.com/Zeprakadebra/MMM-RocketLeagueZ```
 3. List the contents of MagicMirror/modules to make sure that MMM-RocketLeagueZ was cloned: ```$ ls```
 4. Change the directory to MagicMirror/config: ```$ cd ~/MagicMirror/config```
 5. Modify your config.js file and add the MMM-RocketLeagueZ module: ```$ sudo nano config.js```
