@@ -13,73 +13,63 @@ module.exports = NodeHelper.create({
 		console.log('Starting node_helper for: ' + this.name);
 	},
 
-	getStat: function(baseURL) {
-		return axios.get(baseURL)
+	getStat: function(userURL) {
+		return axios.get(userURL)
 			.catch((error) => {
-				console.log(error + ' during axios get from ' + baseURL);
+				console.log('node_helper of ' + this.name + ' ' + error + ' during axios get from ' + userURL);
 			});
 	},
 
-	getStats: function(payload) {
+	sendStats: function(payload) {
 		let identifier = payload.identifier;
 		let gamers = payload.gamers;
-		let playlistsNeeded = payload.playlists;
 		let baseURL = payload.baseURL;
-		let promises = [];
 
-		let stats = [];
+		let promises = [];
 
 		gamers.forEach((gamer) => {
 			const userURL = baseURL + gamer + '?';
 			promises.push(this.getStat(userURL));
 		});
 
+		let stats = [];
+
 		Promise.all(promises)
 			.then((gamers) => {
 				gamers.forEach((gamer) => {
 					const gamertag = gamer.data.data.platformInfo.platformUserIdentifier;
 					const segments = gamer.data.data.segments;
+
 					let playlists = [];
 
 					segments.forEach((segment) => {
 						if (segment.type == 'playlist') {
-							let divNo = segment.stats.division.metadata.name;
-							switch (divNo) {
-								case 'Divison I':
-									divNo = '1';
-									break;
-								case 'Division II':
-									divNo = '2';
-									break;
-								case 'Division III':
-									divNo = '3';
-									break;
-								case 'Division IV':
-									divNo = '4';
-									break;
-								default:
-									divNo = '0';
-									break;
-							}
-							
+
 							const playlist = {
 								name: segment.metadata.name,
 								rankName: segment.stats.tier.metadata.name,
 								iconURL: segment.stats.tier.metadata.iconUrl,
-								divisionNumber: divNo,
+								divisionNumber: segment.stats.division.metadata.name,
 								rankValue: segment.stats.rating.value
 							};
+
 							playlists.push(playlist);
 						}
 					});
-				const stat = {gamertag: gamertag, playlists: playlists};
-				stats.push(stat);
+
+					const stat = {
+						gamertag: gamertag, 
+						playlists: playlists
+					};
+
+					stats.push(stat);
 				});
-				console.log('sending STATS_RESULT' + stats.length);
+
+				console.log('node_helper of ' + this.name + ' sending STATS_RESULT including ' + stats.length + ' stats.');
 				this.sendSocketNotification('STATS_RESULT', {identifier: identifier, stats: stats} );
 			})
 			.catch((error) => {
-				console.log(error);
+				console.log('node_helper of ' + this.name + ':' + error + ' during axios promise receiption');
 			});
 	},
 
@@ -87,7 +77,7 @@ module.exports = NodeHelper.create({
 	socketNotificationReceived: function(notification, payload) {
 		if (notification === 'GET_STATS') {
 			console.log('node_helper of ' + this.name + ' received GET_STATS socket notification');
-			this.getStats(payload);
+			this.sendStats(payload);
 		}
 	}
 

@@ -5,5 +5,9 @@
 	"Ranked Duel 1v1": "Single",
 	"Ranked Doubles 2v2": "Doubles",
 	"Ranked Standard 3v3": "Standard",
-	"Tournament Matches": "Tournament"
+	"Tournament Matches": "Tournament",
+	"Divison I": "1",
+	"Divison II": "2",
+	"Divison III": "3",
+	"Division IV": "4"
 }

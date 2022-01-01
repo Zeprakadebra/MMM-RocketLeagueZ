@@ -22,7 +22,11 @@ Module.register('MMM-RocketLeagueZ', {
             'Ranked Standard 3v3',
             'Tournament Matches'
         ],
-		fetchInterval: 10*60*1000 // in milliseconds. default every ten minutes
+		fetchInterval: 10*60*1000,
+		fetchIntervalMin: 60*1000, 
+		rotateInterval: 10*1000,
+		rotateIntervalMin: 2*1000,
+		animationSpeed: 400
 	},
 
 	getStyles: function() {
@@ -71,7 +75,6 @@ Module.register('MMM-RocketLeagueZ', {
 			wrapper.className = 'loading dimmed xsmall';
 		} else {
 			console.log('stats rendering: ' + this.stats.length);
-			let html = '';
 			this.stats.forEach((stat) => {
 				console.log(stat.gamertag);
 			});
@@ -87,13 +90,29 @@ Module.register('MMM-RocketLeagueZ', {
 		console.log(this.name + ': Modul started');
 
 		// Tell node_helper to load stats at startup.
-		this.sendSocketNotification('GET_STATS', { identifier: this.identifier, baseURL: this.config.baseURL, gamers: this.config.gamers });
+		this.sendSocketNotification('GET_STATS', { 
+			identifier: this.identifier, 
+			baseURL: this.config.baseURL, 
+			gamers: this.config.gamers
+		});
+		
 		console.log(this.name + ': GET_STATS SocketNotification sent');
 		
 		// Make sure stats are reloaded at user specified interval.
 		let self = this;
-		setInterval(function() {self.sendSocketNotification('GET_STATS', { identifier: self.identifier, baseURL: self.config.baseURL, gamers: self.config.gamers });}, Math.max(self.config.fetchInterval, 1000)); // In millisecs.
-		console.log(this.name + ': SocketNotification interval set');
+		setInterval(function() {
+			self.updateDom(self.config.animationSpeed); 
+		}, Math.max(self.config.rotateInterval, self.config.rotateIntervalMin));		
+		
+		setInterval(function() {
+			self.sendSocketNotification('GET_STATS', { 
+				identifier: self.identifier, 
+				baseURL: self.config.baseURL, 
+				gamers: self.config.gamers 
+			});
+		}, Math.max(self.config.fetchInterval, self.config.fetchIntervalMin));
+		
+			console.log(this.name + ': SocketNotification interval set');
 		console.log(this.name + ': waiting for reply from node_helper');		
 	}
 });
