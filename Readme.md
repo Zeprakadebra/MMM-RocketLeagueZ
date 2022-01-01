@@ -3,8 +3,7 @@ This MagicMirror2 module named MMM-RocketLeagueZ displays cross-platform stats (
 
 You can choose for which gamertags and platforms you want to get stats.
 
-![RocketLeagueZ_png](https://github.com/Zeprakadebra/MMM-RocketLeagueZ/blob/master/MMM-RocketLeagueZ.PNG)
-
+![RocketLeagueZ_png](https://github.com/Zeprakadebra/MMM-RocketLeagueZ/blob/master/MMM-RocketLeagueZ.png)
 # Install
 1. Change the directory to MagicMirror/modules: ```$ cd MagicMirror/modules```
 2. Clone this repo: ```$ git clone https://github.com/Zeprakadebra/blob/master/MMM-RocketLeagueZ```
