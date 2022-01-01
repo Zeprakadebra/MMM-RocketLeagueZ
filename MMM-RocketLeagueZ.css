@@ -11,7 +11,7 @@
 	}
 
 .division {
-	text-align: left;
+	text-align: center;
 	font-style: italic;
 	font-size: 20px;
 	color: gold;
@@ -32,7 +32,7 @@
 .mmr {
 	font-style: italic;
 	color: lightblue;
-	width: 80px;
+	width: 120px;
 	}
 
 .streakWin, .streakLoss {
