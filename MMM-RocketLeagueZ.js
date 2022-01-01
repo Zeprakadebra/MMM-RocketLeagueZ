@@ -105,26 +105,22 @@ Module.register('MMM-RocketLeagueZ', {
 				let cell = document.createElement('td');
 					cell.rowSpan = 2;
 					cell.innerHTML = "<img src='" + gamer.avatarURL + "' width=80px height=80px alt='" + gamer.tag + "'/>"  
-					cell.style.cssText = 'text-align: left;';
 					row.appendChild(cell);
 			
 					cell = document.createElement('td');
 					cell.rowSpan = 2;
 					cell.className = 'gamer';
 					cell.innerHTML = gamer.tag;  
-					cell.style.cssText = 'text-align: left;';
 					row.appendChild(cell);
 
 					cell = document.createElement('td');
 					cell.className = 'mmr';
 					cell.innerHTML = gamer.rankValue;  
-					cell.style.cssText = 'text-align: right;';
 					row.appendChild(cell);
 
 					cell = document.createElement('td');
 					cell.rowSpan = 2;
-					cell.innerHTML = "<img src='" + gamer.iconURL + "' width=80px height=80px alt='" + gamer.rankName + "'/>"  
-					cell.style.cssText = 'text-align: left;';
+					cell.innerHTML = this.config.playlists[this.currentPlaylist] == 'Un-Ranked' ? '' : "<img src='" + gamer.iconURL + "' width=80px height=80px alt='" + gamer.rankName + "'/>"  
 					row.appendChild(cell);
 					wrapper.appendChild(row);
 
@@ -132,8 +128,7 @@ Module.register('MMM-RocketLeagueZ', {
 
 					cell = document.createElement('td');
 					cell.className = 'division';
-					cell.innerHTML = gamer.divisionNumber;  
-					cell.style.cssText = 'text-align: right;';
+					cell.innerHTML = this.config.playlists[this.currentPlaylist] == 'Un-Ranked' ? '' : gamer.divisionNumber;  
 					row.appendChild(cell);
 					wrapper.appendChild(row);
 			});
