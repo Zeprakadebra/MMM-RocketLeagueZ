@@ -39,6 +39,13 @@ If everything runs as expected you can customize the config param based on the t
 </tr>
 
 <tr>
+<td>playlists</td>
+<td>['Un-Ranked', 'Ranked Duel 1v1', 'Ranked Doubles 2v2', 'Ranked Standard 3v3', 'Tournament Matches']</td>
+<td>Array of str</td>
+<td>This param array is used to define the playlists to get display stats for. The array consists of strings of the origin playlists names. </td>
+</tr>
+
+<tr>
 <td>baseURL</td>
 <td>https://api.tracker.gg/api/v2/rocket-league/standard/profile/</td>
  <td>str</td>
