@@ -10,10 +10,11 @@ Module.register('MMM-RocketLeagueZ', {
 	defaults: {
         baseURL: 'https://api.tracker.gg/api/v2/rocket-league/standard/profile/',
         gamers: [
-            'xbl/SkillKiddo', 
-            'xbl/RauRauBeck', 
-            'xbl/BarbieBasil', 
-            'xbl/DoriBombino'
+            'epic/KhaliDx.',
+			'steam/FirstKiller',
+			'xbl/Rezears',
+			'psn/M0nkey_M00n_',
+			'switch/Nuqqet'
         ],
 		playlists: [
             'Un-Ranked',
